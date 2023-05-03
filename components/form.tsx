@@ -7,15 +7,20 @@ import toast from "react-hot-toast";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 
-export default function Form({ type }: { type: "login" | "register" }) {
+export default function Form({
+  type,
+  role,
+}: {
+  type: "login" | "register";
+  role: "USER" | "ADMIN";
+}) {
   const [loading, setLoading] = useState(false);
-  const [role, setRole] = useState('USER');
   const router = useRouter();
 
   return (
     <form
       onSubmit={(e) => {
-        console.log(e.currentTarget)
+        console.log(e.currentTarget);
         e.preventDefault();
         setLoading(true);
         if (type === "login") {
@@ -27,7 +32,12 @@ export default function Form({ type }: { type: "login" | "register" }) {
           }).then(({ ok, error }) => {
             setLoading(false);
             if (ok) {
-              router.push("/protected");
+              if (role === "ADMIN") {
+                router.push("/admin/home");
+              }
+              if (role === "USER") {
+                router.push("/user/home");
+              }
             } else {
               toast.error(error);
             }
@@ -41,7 +51,7 @@ export default function Form({ type }: { type: "login" | "register" }) {
             body: JSON.stringify({
               email: e.currentTarget.email.value,
               password: e.currentTarget.password.value,
-              role: role
+              role: role,
             }),
           }).then(async (res) => {
             setLoading(false);
@@ -90,25 +100,6 @@ export default function Form({ type }: { type: "login" | "register" }) {
           className="mt-1 block w-full appearance-none rounded-md border border-gray-300 px-3 py-2 placeholder-gray-400 shadow-sm focus:border-black focus:outline-none focus:ring-black sm:text-sm"
         />
       </div>
-      {type === 'register' && <div>
-        <label
-            htmlFor="role"
-            className="block text-xs text-gray-600 uppercase"
-        >
-          Role
-        </label>
-        <select
-            onChange={(e) => setRole(e.target.value)}
-            id="role"
-            name="role"
-            defaultValue={"USER"}
-            required
-            className="mt-1 block w-full appearance-none rounded-md border border-gray-300 px-3 py-2 placeholder-gray-400 shadow-sm focus:border-black focus:outline-none focus:ring-black sm:text-sm"
-        >
-          <option label={'Admin'} value={'ADMIN'}/>
-          <option label={'User'} value={'USER'}/>
-        </select>
-      </div>}
       <button
         disabled={loading}
         className={`${

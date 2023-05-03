@@ -7,7 +7,8 @@
     "prebuild": "prisma generate",
     "predev": "prisma generate",
     "prisma:generate": "prisma migrate dev",
-    "prisma:migrate": "prisma migrate deploy"
+    "prisma:migrate": "prisma migrate deploy",
+    "prettier": "npx prettier --write ."
   },
   "dependencies": {
     "@next/font": "^13.0.5",
@@ -17,6 +18,7 @@
     "bcrypt": "^5.1.0",
     "next": "^13.0.5",
     "next-auth": "^4.17.0",
+    "prettier": "^2.8.8",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-hot-toast": "^2.4.0"

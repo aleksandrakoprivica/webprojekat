@@ -20,7 +20,7 @@ export default function Login() {
             Create an account with your email and password
           </p>
         </div>
-        <Form type="register" />
+        <Form type="register" role={"USER"} />
       </div>
     </div>
   );

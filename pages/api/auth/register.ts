@@ -19,7 +19,7 @@ export default async function handler(
       data: {
         email,
         password: await hash(password, 10),
-        role
+        role,
       },
     });
     res.status(200).json(user);

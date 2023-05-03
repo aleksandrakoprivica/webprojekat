@@ -15,12 +15,12 @@ export default function Login() {
               height={20}
             />
           </a>
-          <h3 className="text-xl font-semibold">Sign In</h3>
+          <h3 className="text-xl font-semibold">Sign Up - Admin</h3>
           <p className="text-sm text-gray-500">
-            Use your email and password to sign in
+            Create an account with your email and password
           </p>
         </div>
-        <Form type="login" />
+        <Form type="register" role={"ADMIN"} />
       </div>
     </div>
   );
