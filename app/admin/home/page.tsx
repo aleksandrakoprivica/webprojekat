@@ -1,19 +1,34 @@
+'use client'
+
 import SignOut from "@/components/sign-out";
+import {useEffect, useState} from "react";
 
 export default function Home() {
+    const [events, setEvents] = useState([])
+
+    useEffect(() => {
+        getEvents().then((events) => {
+            setEvents(events)
+        })
+    },[])
+
+    const getEvents = async () => {
+        const events = await fetch('/api/admin')
+
+        return await events.json()
+    }
+
   return (
     <div className="flex h-screen bg-black">
-      <div className="w-screen h-screen flex flex-col space-y-5 justify-center items-center">
-        <iframe
-          src="https://www.youtube.com/embed/dQw4w9WgXcQ?autoplay=1"
-          title="YouTube video player"
-          frameBorder="0"
-          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-          allowFullScreen
-          className="w-full max-w-screen-lg aspect-video"
-        ></iframe>
+        <button className={'bg-amber-50'} onClick={() => getEvents()}>Get events</button>
         <SignOut />
-      </div>
+        <div className={'text-amber-50'}>
+            {events.map((event) => {
+                return (
+                    <p>{JSON.stringify(event)}</p>
+                )
+            })}
+        </div>
     </div>
   );
 }

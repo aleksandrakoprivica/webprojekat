@@ -9,8 +9,7 @@ export default NextAuth({
       credentials: {},
       // @ts-ignore
       async authorize(credentials, req) {
-
-        const comingFromAdmin = req.body?.callbackUrl.includes('admin');
+        const comingFromAdmin = req.body?.callbackUrl.includes("admin");
 
         const { email, password } = credentials as {
           email: string;
@@ -21,8 +20,8 @@ export default NextAuth({
         }
         const user = await prisma.user.findFirst({
           where: {
-              email,
-              role: comingFromAdmin ? 'ADMIN' : 'USER'
+            email,
+            role: comingFromAdmin ? "ADMIN" : "USER",
           },
         });
         // if user doesn't exist or password doesn't match
