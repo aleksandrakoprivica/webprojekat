@@ -8,7 +8,10 @@ export default NextAuth({
     CredentialsProvider({
       credentials: {},
       // @ts-ignore
-      async authorize(credentials, _) {
+      async authorize(credentials, req) {
+
+        const comingFromAdmin = req.body?.callbackUrl.includes('admin');
+
         const { email, password } = credentials as {
           email: string;
           password: string;
@@ -16,9 +19,10 @@ export default NextAuth({
         if (!email || !password) {
           throw new Error("Missing username or password");
         }
-        const user = await prisma.user.findUnique({
+        const user = await prisma.user.findFirst({
           where: {
-            email,
+              email,
+              role: comingFromAdmin ? 'ADMIN' : 'USER'
           },
         });
         // if user doesn't exist or password doesn't match
