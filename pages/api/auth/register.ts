@@ -6,7 +6,7 @@ export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
-  const { email, password } = req.body;
+  const { email, password, role } = req.body;
   const exists = await prisma.user.findUnique({
     where: {
       email,
@@ -19,6 +19,7 @@ export default async function handler(
       data: {
         email,
         password: await hash(password, 10),
+        role
       },
     });
     res.status(200).json(user);
