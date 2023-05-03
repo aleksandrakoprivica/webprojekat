@@ -1,7 +1,9 @@
 'use client'
 
 import SignOut from "@/components/sign-out";
-import {useEffect, useState} from "react";
+import React, {useEffect, useState} from "react";
+import AuthStatus from "@/components/auth-status";
+import EventItem from "@/components/event-item";
 
 export default function Home() {
     const [events, setEvents] = useState([])
@@ -18,14 +20,24 @@ export default function Home() {
         return await events.json()
     }
 
+    if (events.length === 0) {
+        return <p>Loading...</p>
+    }
+
   return (
-    <div className="flex h-screen bg-black">
-        <button className={'bg-amber-50'} onClick={() => getEvents()}>Get events</button>
-        <SignOut />
-        <div className={'text-amber-50'}>
+    <div className="flex flex-col h-screen bg-black">
+        <div className={'flex h-[100px] w-full bg-cyan-600'}>
+            <div>
+                Manage events
+            </div>
+            <div className={'absolute right-0'}>
+                <SignOut />
+            </div>
+        </div>
+        <div className={'text-amber-50 flex flex-col gap-3'}>
             {events.map((event) => {
                 return (
-                    <p>{JSON.stringify(event)}</p>
+                    <EventItem eventItem={event}/>
                 )
             })}
         </div>
