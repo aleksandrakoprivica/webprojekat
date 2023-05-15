@@ -20,7 +20,6 @@ export default function Form({
   return (
     <form
       onSubmit={(e) => {
-        console.log(e.currentTarget);
         e.preventDefault();
         setLoading(true);
         if (type === "login") {
@@ -114,6 +113,7 @@ export default function Form({
           <p>{type === "login" ? "Sign In" : "Sign Up"}</p>
         )}
       </button>
+      {/*TODO - update href */}
       {type === "login" ? (
         <p className="text-center text-sm text-gray-600">
           Don&apos;t have an account?{" "}
