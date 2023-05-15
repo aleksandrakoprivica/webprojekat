@@ -1,5 +1,4 @@
 import { unstable_getServerSession } from "next-auth/next";
-import { getSession } from "next-auth/react";
 
 export default async function AuthStatus() {
   const session = await unstable_getServerSession();

@@ -57,7 +57,7 @@ export default function Form({
             if (res.status === 200) {
               toast.success("Account created! Redirecting to login...");
               setTimeout(() => {
-                router.push("/login");
+                router.push(`${role.toLowerCase()}/login`);
               }, 2000);
             } else {
               toast.error(await res.text());
@@ -117,15 +117,15 @@ export default function Form({
       {type === "login" ? (
         <p className="text-center text-sm text-gray-600">
           Don&apos;t have an account?{" "}
-          <Link href="/register" className="font-semibold text-gray-800">
-            Sign up
-          </Link>{" "}
+          <Link href={`/${role.toLowerCase()}/register`} className="font-semibold text-gray-800">
+            Sign up{" "}
+          </Link>
           for free.
         </p>
       ) : (
         <p className="text-center text-sm text-gray-600">
           Already have an account?{" "}
-          <Link href="/login" className="font-semibold text-gray-800">
+          <Link href={`/${role.toLowerCase()}/login`} className="font-semibold text-gray-800">
             Sign in
           </Link>{" "}
           instead.
