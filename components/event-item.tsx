@@ -1,14 +1,19 @@
 "use client";
 
-import { FC } from "react";
+import React, { FC, useState } from "react";
 import moment from "moment";
+import DeleteEventModal from "@/components/delete-event-modal";
+import EditEventModal from "@/components/edit-event-modal";
 
 interface EventItemProps {
   eventItem: any;
+  getEvents: () => void;
+  currentUserEmail: string | null;
 }
 
-const EventItem: FC<EventItemProps> = ({ eventItem }) => {
-  console.log(eventItem);
+const EventItem: FC<EventItemProps> = ({ eventItem, getEvents, currentUserEmail}) => {
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState<boolean>(false);
+  const [isEditModalOpen, setIsEditModalOpen] = useState<boolean>(false);
   return (
     <div
       className={
@@ -21,7 +26,9 @@ const EventItem: FC<EventItemProps> = ({ eventItem }) => {
       </div>
       <div className={"flex flex-col items-center"}>
         <div className={"text-orange-800 font-bold"}>Date</div>
-        <div className={"text-black"}>{moment(eventItem.date).format("dd-mm-yyyy")}</div>
+        <div className={"text-black"}>
+          {moment(eventItem.date).format("dd-mm-yyyy")}
+        </div>
       </div>
       <div className={"flex flex-col items-center"}>
         <div className={"text-orange-800 font-bold"}>Description</div>
@@ -48,9 +55,39 @@ const EventItem: FC<EventItemProps> = ({ eventItem }) => {
         <div className={"text-black"}>77</div>
       </div>
 
-      <div className={"bg-amber-50 text-amber-900 font-bold"}>VIEW ATTENDEES</div>
-      <div className={"text-red-700 font-mono"}>DELETE</div>
-      <div className={"bg-amber-50 text-orange-800 font-bold"}>EDIT</div>
+      <div className={"bg-amber-50 text-amber-900 font-bold cursor-pointer"}>
+        VIEW ATTENDEES
+      </div>
+      <div
+        className={"text-red-700 font-mono cursor-pointer "}
+        onClick={() => setIsDeleteModalOpen(true)}
+      >
+        DELETE
+      </div>
+      <div
+        onClick={() => setIsEditModalOpen(true)}
+        className={"bg-amber-50 text-orange-800 font-bold cursor-pointer"}
+      >
+        EDIT
+      </div>
+      <DeleteEventModal
+        isOpen={isDeleteModalOpen}
+        onClose={() => {
+          getEvents();
+          setIsDeleteModalOpen(false);
+        }}
+        id={eventItem.id}
+      />
+      <EditEventModal
+          currentUserEmail={currentUserEmail}
+          getEvents={getEvents}
+        isOpen={isEditModalOpen}
+        onClose={() => {
+          getEvents();
+          setIsEditModalOpen(false);
+        }}
+        event={eventItem}
+      />
     </div>
   );
 };
