@@ -17,8 +17,9 @@ const DetailsEventModal: FC<DetailsEventModalProps> = ({
                                                      currentUserEmail,
                                                  }) => {
     return (
-        <Modal isOpen={isOpen} onRequestClose={onClose}>
-            <form
+        <Modal className={"fixed inset-0 flex items-center justify-center bg-black bg-opacity-50"} isOpen={isOpen} onRequestClose={onClose}>
+
+            <form className={"bg-amber-100"}
                 onSubmit={async (e) => {
                     e.preventDefault();
                     await fetch(`/api/user/`, {
@@ -41,6 +42,9 @@ const DetailsEventModal: FC<DetailsEventModalProps> = ({
                     });
                 }}
             >
+                <div className="bg-orange-200 p-4">
+                    <h2 className="text-2xl mb-4 font-bold text-amber-900 ">EVENT DETAILS</h2>
+                </div>
                 <div className={"h-full flex flex-col"}>
                     <label
                         htmlFor="eventName"
