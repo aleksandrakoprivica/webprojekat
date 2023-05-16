@@ -51,7 +51,13 @@ export default function Home() {
 
       <div className={"text-amber-50 flex flex-col gap-3"}>
         {events.map((event) => {
-          return <EventItem currentUserEmail={currentUserEmail} eventItem={event} getEvents={getEvents} />;
+          return (
+            <EventItem
+              currentUserEmail={currentUserEmail}
+              eventItem={event}
+              getEvents={getEvents}
+            />
+          );
         })}
       </div>
       <AddNewEventModal

@@ -23,7 +23,7 @@ const AddNewEventModal: FC<AddNewEventModalProps> = ({
     <Modal isOpen={isOpen} onRequestClose={onClose}>
       <form
         onSubmit={async (e) => {
-          e.preventDefault()
+          e.preventDefault();
           await fetch("/api/admin", {
             method: "POST",
             headers: {

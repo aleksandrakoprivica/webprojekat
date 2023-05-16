@@ -49,27 +49,26 @@ export default async function handler(
 
       const event = await prisma.event.findFirst({
         where: {
-          id: eventId
-        }
-      })
+          id: eventId,
+        },
+      });
 
-      if (event && (event.authorEmail !== req.body.authorEmail)){
+      if (event && event.authorEmail !== req.body.authorEmail) {
         res.status(403).send({ message: "You can edit only your events" });
       }
 
-      console.log(req.body)
+      console.log(req.body);
 
       const updatedEvent = await prisma.event.update({
         where: {
-          id: eventId
+          id: eventId,
         },
-        data: req.body
-      })
+        data: req.body,
+      });
 
-      res.status(200).json({message: 'Updated'});
-
+      res.status(200).json({ message: "Updated" });
     } catch (e) {
-      console.log(e)
+      console.log(e);
     }
   }
 }

@@ -11,7 +11,11 @@ interface EventItemProps {
   currentUserEmail: string | null;
 }
 
-const EventItem: FC<EventItemProps> = ({ eventItem, getEvents, currentUserEmail}) => {
+const EventItem: FC<EventItemProps> = ({
+  eventItem,
+  getEvents,
+  currentUserEmail,
+}) => {
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState<boolean>(false);
   const [isEditModalOpen, setIsEditModalOpen] = useState<boolean>(false);
   return (
@@ -79,8 +83,8 @@ const EventItem: FC<EventItemProps> = ({ eventItem, getEvents, currentUserEmail}
         id={eventItem.id}
       />
       <EditEventModal
-          currentUserEmail={currentUserEmail}
-          getEvents={getEvents}
+        currentUserEmail={currentUserEmail}
+        getEvents={getEvents}
         isOpen={isEditModalOpen}
         onClose={() => {
           getEvents();

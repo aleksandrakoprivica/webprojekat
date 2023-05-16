@@ -117,7 +117,10 @@ export default function Form({
       {type === "login" ? (
         <p className="text-center text-sm text-gray-600">
           Don&apos;t have an account?{" "}
-          <Link href={`/${role.toLowerCase()}/register`} className="font-semibold text-gray-800">
+          <Link
+            href={`/${role.toLowerCase()}/register`}
+            className="font-semibold text-gray-800"
+          >
             Sign up{" "}
           </Link>
           for free.
@@ -125,7 +128,10 @@ export default function Form({
       ) : (
         <p className="text-center text-sm text-gray-600">
           Already have an account?{" "}
-          <Link href={`/${role.toLowerCase()}/login`} className="font-semibold text-gray-800">
+          <Link
+            href={`/${role.toLowerCase()}/login`}
+            className="font-semibold text-gray-800"
+          >
             Sign in
           </Link>{" "}
           instead.

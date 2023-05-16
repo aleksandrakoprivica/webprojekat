@@ -18,6 +18,7 @@ const DeleteEventModal: FC<DeleteEventModalProps> = ({
       headers: {
         "Content-Type": "application/json",
       },
+      body: JSON.stringify({ id }),
     }).then(() => onClose());
   };
 

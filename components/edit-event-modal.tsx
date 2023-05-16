@@ -1,4 +1,3 @@
-
 import React, { FC } from "react";
 import Modal from "react-modal";
 
@@ -14,29 +13,34 @@ const EditEventModal: FC<EditEventModalProps> = ({
   isOpen,
   onClose,
   event,
-    getEvents,
-    currentUserEmail
+  getEvents,
+  currentUserEmail,
 }) => {
   return (
     <Modal isOpen={isOpen} onRequestClose={onClose}>
-      <form onSubmit={async (e) => {
-        e.preventDefault()
-        await fetch(`/api/admin/${event.id}`, {
-          method: "PUT",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            name: e.currentTarget.eventName.value,
-            description: e.currentTarget.description.value,
-            type: e.currentTarget.type.value,
-            location: e.currentTarget.location.value,
-            date: new Date(e.currentTarget.date.value),
-            authorEmail: currentUserEmail,
-          }),
-        }).then(() => {console.log("event updated");
-          getEvents();onClose()});
-      }}>
+      <form
+        onSubmit={async (e) => {
+          e.preventDefault();
+          await fetch(`/api/admin/${event.id}`, {
+            method: "PUT",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              name: e.currentTarget.eventName.value,
+              description: e.currentTarget.description.value,
+              type: e.currentTarget.type.value,
+              location: e.currentTarget.location.value,
+              date: new Date(e.currentTarget.date.value),
+              authorEmail: currentUserEmail,
+            }),
+          }).then(() => {
+            console.log("event updated");
+            getEvents();
+            onClose();
+          });
+        }}
+      >
         <div className={"h-full flex flex-col"}>
           <label
             htmlFor="eventName"
@@ -105,7 +109,7 @@ const EditEventModal: FC<EditEventModalProps> = ({
             name="date"
             type="date"
             required
-            defaultValue={`${event.date.split('T')[0]}`}
+            defaultValue={`${event.date.split("T")[0]}`}
             className="mt-1 block w-full  rounded-md border border-gray-300 px-3 py-2 placeholder-gray-400 shadow-sm focus:border-black focus:outline-none focus:ring-black sm:text-sm"
           />
 
