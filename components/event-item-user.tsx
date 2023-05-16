@@ -2,7 +2,6 @@
 
 import React, { FC, useState } from "react";
 import moment from "moment";
-import detailsEventModal from "@/components/details-event-modal";
 import DetailsEventModal from "@/components/details-event-modal";
 
 interface EventItemProps {
@@ -16,7 +15,6 @@ const EventItemUser: FC<EventItemProps> = ({
   getEvents,
   currentUserEmail,
 }) => {
-
   const [isDetailsModalOpen, setIsDetailsModalOpen] = useState<boolean>(false);
   return (
     <div
@@ -45,10 +43,8 @@ const EventItemUser: FC<EventItemProps> = ({
         VIEW DETAILS
       </div>
 
-
       <DetailsEventModal
         currentUserEmail={currentUserEmail}
-        getEvents={getEvents}
         isOpen={isDetailsModalOpen}
         onClose={() => {
           getEvents();
