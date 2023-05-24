@@ -4,20 +4,23 @@ import React, { FC, useState } from "react";
 import moment from "moment";
 import DeleteEventModal from "@/components/delete-event-modal";
 import EditEventModal from "@/components/edit-event-modal";
+import AttendeesModal from "@/components/attendees-modal";
 
 interface EventItemProps {
   eventItem: any;
   getEvents: () => void;
-  currentUserEmail: string | null;
+  currentUserId: string | null;
 }
 
 const EventItem: FC<EventItemProps> = ({
   eventItem,
   getEvents,
-  currentUserEmail,
+  currentUserId,
 }) => {
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState<boolean>(false);
   const [isEditModalOpen, setIsEditModalOpen] = useState<boolean>(false);
+  const [isAttendeesModalOpen, setIsAttendeesModalOpen] =
+    useState<boolean>(false);
   return (
     <div
       className={
@@ -31,7 +34,7 @@ const EventItem: FC<EventItemProps> = ({
       <div className={"flex flex-col items-center"}>
         <div className={"text-orange-800 font-bold"}>Date</div>
         <div className={"text-black"}>
-          {moment(eventItem.date).format("dd-mm-yyyy")}
+          {moment(eventItem.date).format("DD-MM-YYYY")}
         </div>
       </div>
       <div className={"flex flex-col items-center"}>
@@ -43,8 +46,8 @@ const EventItem: FC<EventItemProps> = ({
         <div className={"text-black"}>{eventItem.location}</div>
       </div>
       <div className={"flex flex-col items-center"}>
-        <div className={"text-orange-800 font-bold"}>Author Email</div>
-        <div className={"text-black"}>{eventItem.authorEmail}</div>
+        <div className={"text-orange-800 font-bold"}>Creator</div>
+        <div className={"text-black"}>{eventItem.creator.email}</div>
       </div>
       <div className={"flex flex-col items-center"}>
         <div className={"text-orange-800 font-bold"}>Type</div>
@@ -52,14 +55,19 @@ const EventItem: FC<EventItemProps> = ({
       </div>
       <div className={"flex flex-col items-center"}>
         <div className={"text-orange-800 font-bold"}>Created</div>
-        <div className={"text-black"}>{eventItem.createdAt}</div>
+        <div className={"text-black"}>
+          {moment(eventItem.createdAt).format("DD-MM-YYYY")}
+        </div>
       </div>
       <div className={"flex flex-col items-center"}>
         <div className={"text-orange-800 font-bold"}>Attendees</div>
-        <div className={"text-black"}>77</div>
+        <div className={"text-black"}> {eventItem.attendees.length}</div>
       </div>
 
-      <div className={"bg-amber-50 text-amber-900 font-bold cursor-pointer"}>
+      <div
+        className={"bg-amber-50 text-amber-900 font-bold cursor-pointer"}
+        onClick={() => setIsAttendeesModalOpen(true)}
+      >
         VIEW ATTENDEES
       </div>
       <div
@@ -74,6 +82,11 @@ const EventItem: FC<EventItemProps> = ({
       >
         EDIT
       </div>
+      <AttendeesModal
+        isOpen={isAttendeesModalOpen}
+        onClose={() => setIsAttendeesModalOpen(false)}
+        attendees={eventItem.attendees}
+      />
       <DeleteEventModal
         isOpen={isDeleteModalOpen}
         onClose={() => {
@@ -83,7 +96,7 @@ const EventItem: FC<EventItemProps> = ({
         id={eventItem.id}
       />
       <EditEventModal
-        currentUserEmail={currentUserEmail}
+        currentUserId={currentUserId}
         getEvents={getEvents}
         isOpen={isEditModalOpen}
         onClose={() => {

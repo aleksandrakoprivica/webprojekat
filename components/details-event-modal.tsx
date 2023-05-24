@@ -1,32 +1,55 @@
 import React, { FC } from "react";
 import Modal from "react-modal";
+import classNames from "classnames";
 
 interface DetailsEventModalProps {
   isOpen: boolean;
   onClose: () => void;
   event: any;
-  currentUserEmail: string | null;
+  currentUserId: string | null;
+  isMyEvents?: boolean;
 }
 
 const DetailsEventModal: FC<DetailsEventModalProps> = ({
   isOpen,
   onClose,
   event,
-  currentUserEmail,
+  currentUserId,
+  isMyEvents,
 }) => {
-  console.log(currentUserEmail);
   const applyToEvent = async () => {
-    await fetch("/api/user", {
+    await fetch("/api/attendance", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        userEmail: currentUserEmail,
+        userId: currentUserId,
         eventId: event.id,
       }),
     });
+    onClose();
   };
+
+  const removeAttendance = async () => {
+    await fetch("/api/attendance/delete", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        userId: currentUserId,
+        eventId: event.id,
+      }),
+    });
+    onClose();
+  };
+
+  console.log(
+    !!event.attendees?.find(
+      (attendee: any) => attendee.userId === currentUserId
+    )
+  );
 
   return (
     <Modal
@@ -100,14 +123,41 @@ const DetailsEventModal: FC<DetailsEventModalProps> = ({
           />
 
           <div className={"flex gap-3 mt-auto"}>
-            <button
-              className={
-                "border-black bg-cyan-600 text-white hover:bg-white hover:text-black flex h-10 w-full items-center justify-center rounded-md border text-sm transition-all focus:outline-none"
-              }
-              onClick={() => applyToEvent()}
-            >
-              Attend
-            </button>
+            {!isMyEvents && (
+              <button
+                disabled={
+                  !!event.attendees.find(
+                    (attendee: any) => attendee.userId === currentUserId
+                  )
+                }
+                className={classNames(
+                  "border-black bg-cyan-600 text-white hover:bg-white hover:text-black flex h-10 w-full items-center justify-center rounded-md border text-sm transition-all focus:outline-none",
+                  {
+                    "hover:bg-gray-400 bg-gray-400 hover:text-white cursor-not-allowed":
+                      !!event.attendees.find(
+                        (attendee: any) => attendee.userId === currentUserId
+                      ),
+                  }
+                )}
+                onClick={() => applyToEvent()}
+              >
+                {event.attendees.find(
+                  (attendee: any) => attendee.userId === currentUserId
+                )
+                  ? "Already attending"
+                  : "Attend"}
+              </button>
+            )}
+            {isMyEvents && (
+              <button
+                className={
+                  "border-black bg-cyan-600 text-white hover:bg-white hover:text-black flex h-10 w-full items-center justify-center rounded-md border text-sm transition-all focus:outline-none"
+                }
+                onClick={() => removeAttendance()}
+              >
+                Remove attendance
+              </button>
+            )}
 
             <button
               onClick={() => onClose()}

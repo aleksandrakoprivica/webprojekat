@@ -7,13 +7,7 @@ import toast from "react-hot-toast";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 
-export default function Form({
-  type,
-  role,
-}: {
-  type: "login" | "register";
-  role: "USER" | "ADMIN";
-}) {
+export default function Form({ type }: { type: "login" | "register" }) {
   const [loading, setLoading] = useState(false);
   const router = useRouter();
 
@@ -28,17 +22,13 @@ export default function Form({
             email: e.currentTarget.email.value,
             password: e.currentTarget.password.value,
             // @ts-ignore
-          }).then(({ ok, error }) => {
-            setLoading(false);
-            if (ok) {
-              if (role === "ADMIN") {
-                router.push("/admin/home");
-              }
-              if (role === "USER") {
-                router.push("/user/home");
-              }
-            } else {
+          }).then(({ error }) => {
+            if (error) {
+              setLoading(false);
               toast.error(error);
+            } else {
+              router.refresh();
+              router.push("/protected");
             }
           });
         } else {
@@ -50,17 +40,18 @@ export default function Form({
             body: JSON.stringify({
               email: e.currentTarget.email.value,
               password: e.currentTarget.password.value,
-              role: role,
+              role: e.currentTarget.userRole.value,
             }),
           }).then(async (res) => {
             setLoading(false);
             if (res.status === 200) {
               toast.success("Account created! Redirecting to login...");
               setTimeout(() => {
-                router.push(`${role.toLowerCase()}/login`);
+                router.push("/login");
               }, 2000);
             } else {
-              toast.error(await res.text());
+              const { error } = await res.json();
+              toast.error(error);
             }
           });
         }
@@ -78,7 +69,7 @@ export default function Form({
           id="email"
           name="email"
           type="email"
-          placeholder="example@gmail.com"
+          placeholder="panic@thedis.co"
           autoComplete="email"
           required
           className="mt-1 block w-full appearance-none rounded-md border border-gray-300 px-3 py-2 placeholder-gray-400 shadow-sm focus:border-black focus:outline-none focus:ring-black sm:text-sm"
@@ -99,12 +90,31 @@ export default function Form({
           className="mt-1 block w-full appearance-none rounded-md border border-gray-300 px-3 py-2 placeholder-gray-400 shadow-sm focus:border-black focus:outline-none focus:ring-black sm:text-sm"
         />
       </div>
+      {type === "register" && (
+        <div>
+          <label
+            htmlFor="userRole"
+            className="block text-xs text-gray-600 uppercase"
+          >
+            Role
+          </label>
+          <select
+            id="userRole"
+            name="userRole"
+            required
+            className="mt-1 block w-full appearance-none rounded-md border border-gray-300 px-3 py-2 placeholder-gray-400 shadow-sm focus:border-black focus:outline-none focus:ring-black sm:text-sm"
+          >
+            <option value="user">User</option>
+            <option value="admin">Admin</option>
+          </select>
+        </div>
+      )}
       <button
         disabled={loading}
         className={`${
           loading
             ? "cursor-not-allowed border-gray-200 bg-gray-100"
-            : "border-black bg-cyan-600 text-white hover:bg-white hover:text-black"
+            : "border-black bg-black text-white hover:bg-white hover:text-black"
         } flex h-10 w-full items-center justify-center rounded-md border text-sm transition-all focus:outline-none`}
       >
         {loading ? (
@@ -113,25 +123,18 @@ export default function Form({
           <p>{type === "login" ? "Sign In" : "Sign Up"}</p>
         )}
       </button>
-      {/*TODO - update href */}
       {type === "login" ? (
         <p className="text-center text-sm text-gray-600">
           Don&apos;t have an account?{" "}
-          <Link
-            href={`/${role.toLowerCase()}/register`}
-            className="font-semibold text-gray-800"
-          >
-            Sign up{" "}
-          </Link>
+          <Link href="/register" className="font-semibold text-gray-800">
+            Sign up
+          </Link>{" "}
           for free.
         </p>
       ) : (
         <p className="text-center text-sm text-gray-600">
           Already have an account?{" "}
-          <Link
-            href={`/${role.toLowerCase()}/login`}
-            className="font-semibold text-gray-800"
-          >
+          <Link href="/login" className="font-semibold text-gray-800">
             Sign in
           </Link>{" "}
           instead.

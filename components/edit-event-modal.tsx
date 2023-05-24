@@ -6,7 +6,7 @@ interface EditEventModalProps {
   onClose: () => void;
   event: any;
   getEvents: () => void;
-  currentUserEmail: string | null;
+  currentUserId: string | null;
 }
 
 const EditEventModal: FC<EditEventModalProps> = ({
@@ -14,14 +14,14 @@ const EditEventModal: FC<EditEventModalProps> = ({
   onClose,
   event,
   getEvents,
-  currentUserEmail,
+  currentUserId,
 }) => {
   return (
     <Modal isOpen={isOpen} onRequestClose={onClose}>
       <form
         onSubmit={async (e) => {
           e.preventDefault();
-          await fetch(`/api/admin/${event.id}`, {
+          await fetch(`/api/event/${event.id}`, {
             method: "PUT",
             headers: {
               "Content-Type": "application/json",
@@ -32,7 +32,7 @@ const EditEventModal: FC<EditEventModalProps> = ({
               type: e.currentTarget.type.value,
               location: e.currentTarget.location.value,
               date: new Date(e.currentTarget.date.value),
-              authorEmail: currentUserEmail,
+              creatorId: currentUserId,
             }),
           }).then(() => {
             console.log("event updated");

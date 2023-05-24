@@ -13,7 +13,7 @@ const DeleteEventModal: FC<DeleteEventModalProps> = ({
   id,
 }) => {
   const deleteEvent = async () => {
-    await fetch(`/api/admin/${id}`, {
+    await fetch(`/api/event/${id}`, {
       method: "DELETE",
       headers: {
         "Content-Type": "application/json",

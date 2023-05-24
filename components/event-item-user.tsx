@@ -7,13 +7,17 @@ import DetailsEventModal from "@/components/details-event-modal";
 interface EventItemProps {
   eventItem: any;
   getEvents: () => void;
-  currentUserEmail: string | null;
+  getMyEvents: () => void;
+  currentUserId: string | null;
+  isMyEvents?: boolean;
 }
 
 const EventItemUser: FC<EventItemProps> = ({
   eventItem,
   getEvents,
-  currentUserEmail,
+  getMyEvents,
+  currentUserId,
+  isMyEvents,
 }) => {
   const [isDetailsModalOpen, setIsDetailsModalOpen] = useState<boolean>(false);
   return (
@@ -29,12 +33,14 @@ const EventItemUser: FC<EventItemProps> = ({
       <div className={"flex flex-col items-center"}>
         <div className={"text-orange-800 font-bold"}>Date</div>
         <div className={"text-black"}>
-          {moment(eventItem.date).format("dd-mm-yyyy")}
+          {moment(eventItem.date).format("DD-MM-YYYY")}
         </div>
       </div>
       <div className={"flex flex-col items-center"}>
         <div className={"text-orange-800 font-bold"}>Created</div>
-        <div className={"text-black"}>{eventItem.createdAt}</div>
+        <div className={"text-black"}>
+          {moment(eventItem.createdAt).format("DD-MM-YYYY")}
+        </div>
       </div>
       <div
         className={"text-red-700 font-mono cursor-pointer "}
@@ -44,13 +50,15 @@ const EventItemUser: FC<EventItemProps> = ({
       </div>
 
       <DetailsEventModal
-        currentUserEmail={currentUserEmail}
+        currentUserId={currentUserId}
         isOpen={isDetailsModalOpen}
         onClose={() => {
           getEvents();
+          getMyEvents();
           setIsDetailsModalOpen(false);
         }}
         event={eventItem}
+        isMyEvents={isMyEvents}
       />
     </div>
   );

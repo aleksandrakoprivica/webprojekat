@@ -1,22 +1,19 @@
-import { getSession } from "next-auth/react";
+"use-client";
 
-("use-client");
-
-import React, { FC, useEffect } from "react";
+import React, { FC } from "react";
 import Modal from "react-modal";
-import LoadingDots from "@/components/loading-dots";
 
 interface AddNewEventModalProps {
   isOpen: boolean;
   onClose: () => void;
-  currentUserEmail: string | null;
+  currentUserId: string | null;
   getEvents: () => void;
 }
 
 const AddNewEventModal: FC<AddNewEventModalProps> = ({
   isOpen,
   onClose,
-  currentUserEmail,
+  currentUserId,
   getEvents,
 }) => {
   return (
@@ -24,7 +21,7 @@ const AddNewEventModal: FC<AddNewEventModalProps> = ({
       <form
         onSubmit={async (e) => {
           e.preventDefault();
-          await fetch("/api/admin", {
+          await fetch("/api/event", {
             method: "POST",
             headers: {
               "Content-Type": "application/json",
@@ -35,7 +32,7 @@ const AddNewEventModal: FC<AddNewEventModalProps> = ({
               type: e.currentTarget.type.value,
               location: e.currentTarget.location.value,
               date: new Date(e.currentTarget.date.value),
-              authorEmail: currentUserEmail,
+              creatorId: currentUserId,
             }),
           }).then(() => {
             console.log("created new event");
